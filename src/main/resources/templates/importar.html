@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Actualizar horarios · Pabellón V</title>
 <link rel="stylesheet" th:href="@{/css/app.css}">
+<link rel="stylesheet" th:href="@{/css/calendario.css}">
 <script defer th:src="@{/js/app.js}">
 </script>
 </head>
@@ -24,6 +25,19 @@
 </p>
 <p class="mensaje error" role="alert" th:if="${error}" th:text="${error}">
 </p>
+
+<section class="panel">
+    <h2>Agregar actividad individual</h2>
+    <p>
+        Registra una actividad puntual o semanal sin
+        importar nuevamente todos los horarios.
+    </p>
+
+    <a class="boton-agregar" th:href="@{/actividades/nueva}">
+        + Agregar actividad
+    </a>
+</section>
+
 <div class="import-grid">
 <section class="panel">
 <h2>Cargar archivo CSV</h2>

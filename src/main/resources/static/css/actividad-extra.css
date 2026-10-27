@@ -1,0 +1,74 @@
+
+.formulario-actividad {
+    max-width: 740px;
+}
+
+.formulario-actividad form {
+    display: grid;
+    gap: 12px;
+}
+
+.formulario-actividad select,
+.formulario-actividad input {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    color: #18394e;
+    font: inherit;
+}
+
+.formulario-actividad .ayuda {
+    font-size: 13px;
+    color: #536877;
+}
+
+.horas-formulario {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.frecuencia-formulario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    border: 1px solid #d3dce5;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.frecuencia-formulario label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.frecuencia-formulario input {
+    width: auto;
+    min-height: auto;
+}
+
+.acciones-actividad {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.boton-secundario {
+    padding: 11px 16px;
+    border: 1px solid #b7c7d2;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+@media (max-width: 580px) {
+    .horas-formulario {
+        grid-template-columns: 1fr;
+    }
+}

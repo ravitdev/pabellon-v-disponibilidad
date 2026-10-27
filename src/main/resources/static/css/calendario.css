@@ -90,3 +90,67 @@
     }
     .calendario-etiqueta-hora { left: 4px; font-size: 10px; }
 }
+
+
+.calendario-acciones {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.boton-agregar {
+    display: inline-flex;
+    align-items: center;
+    background: #165c8d;
+    color: white;
+    padding: 11px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 650;
+}
+
+.boton-agregar:hover {
+    background: #12496f;
+}
+
+.semana-controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.semana-controles button {
+    padding: 8px 12px;
+    min-height: 40px;
+}
+
+.calendario-evento.evento-extra {
+    background: #d8f5e5;
+    color: #166534;
+    border-left-color: #16a34a;
+}
+
+.semana-controles[hidden],
+#error-calendario[hidden] {
+    display: none !important;
+}
+
+.calendario-acciones .boton-agregar,
+.calendario-acciones #cambiar-vista {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    min-height: 42px;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
+    box-sizing: border-box;
+    white-space: nowrap;
+}

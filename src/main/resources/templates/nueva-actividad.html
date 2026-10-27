@@ -1,0 +1,102 @@
+
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agregar actividad · Pabellón V</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/css/actividad-extra.css}">
+</head>
+<body>
+
+<header th:replace="~{fragmentos :: cabecera}"></header>
+
+<main>
+    <a class="volver" th:href="@{/importar}">
+        ← Volver a gestión de horarios
+    </a>
+
+    <div class="intro">
+        <span class="eyebrow">GESTIÓN DE INFORMACIÓN</span>
+        <h1>Agregar actividad</h1>
+        <p>Registra una actividad sin reemplazar el horario existente.</p>
+    </div>
+
+    <div th:replace="~{fragmentos :: aviso}"></div>
+
+    <p class="mensaje error" role="alert"
+       th:if="${error}" th:text="${error}"></p>
+
+    <section class="panel formulario-actividad">
+        <h2>Datos de la actividad</h2>
+
+        <form th:action="@{/actividades}" method="post">
+
+            <label for="ambiente">Ambiente</label>
+            <select id="ambiente" name="ambiente" required>
+                <option value="">Selecciona un ambiente</option>
+                <option th:each="a : ${ambientes}"
+                        th:value="${a.codigo}"
+                        th:selected="${a.codigo == seleccionado}"
+                        th:text="${a.codigo} + ' · ' + ${a.tipo}">
+                </option>
+            </select>
+
+            <label for="descripcion">Nombre de la actividad</label>
+            <input id="descripcion" name="descripcion"
+                   type="text" minlength="2" maxlength="100"
+                   placeholder="Ej. Taller extraordinario" required>
+
+            <label for="fecha">Fecha</label>
+            <input id="fecha" name="fecha" type="date"
+                   th:value="${fechaSugerida}" required>
+
+            <div class="horas-formulario">
+                <div>
+                    <label for="inicio">Hora de inicio</label>
+                    <input id="inicio" name="inicio"
+                           type="time" value="12:00" required>
+                </div>
+                <div>
+                    <label for="fin">Hora de fin</label>
+                    <input id="fin" name="fin"
+                           type="time" value="14:00" required>
+                </div>
+            </div>
+
+            <fieldset class="frecuencia-formulario">
+                <legend>Frecuencia</legend>
+
+                <label>
+                    <input type="radio" name="frecuencia"
+                           value="PUNTUAL" checked>
+                    Solo esta fecha
+                </label>
+
+                <label>
+                    <input type="radio" name="frecuencia"
+                           value="SEMANAL">
+                    Repetir cada semana
+                </label>
+            </fieldset>
+
+            <p class="ayuda">
+                Las actividades no deben coincidir con otros horarios
+                del ambiente. No se admiten horarios que crucen medianoche.
+            </p>
+
+            <div class="acciones-actividad">
+                <a th:href="@{/importar}" class="boton-secundario">
+                    Cancelar
+                </a>
+                <button type="submit">Guardar actividad</button>
+            </div>
+
+        </form>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+</body>
+</html>

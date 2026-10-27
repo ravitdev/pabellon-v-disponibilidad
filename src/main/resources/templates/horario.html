@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Horario semanal · Pabellón V</title>
+    <title>Horario del ambiente · Pabellón V</title>
     <link rel="stylesheet" th:href="@{/css/app.css}">
     <link rel="stylesheet" th:href="@{/css/calendario.css}">
     <script defer th:src="@{/js/app.js}"></script>
@@ -11,49 +12,101 @@
 </head>
 <body>
 <header th:replace="~{fragmentos :: cabecera}"></header>
+
 <main>
-    <a class="volver" th:href="@{/}">← Volver a ambientes</a>
+    <a class="volver" th:href="@{/}">
+        ← Volver a ambientes
+    </a>
+
     <div class="intro">
-        <span class="eyebrow" th:text="${ambiente.tipo} + ' · Piso ' + ${ambiente.piso}"></span>
+        <span class="eyebrow"
+              th:text="${ambiente.tipo} + ' · Piso ' + ${ambiente.piso}">
+        </span>
         <h1 th:text="${ambiente.codigo}"></h1>
-        <p>Programación semanal recurrente</p>
+        <p>Programación semanal y actividades adicionales</p>
     </div>
+
     <div th:replace="~{fragmentos :: aviso}"></div>
 
+    <p class="mensaje exito" role="status"
+       th:if="${exito}" th:text="${exito}"></p>
+
     <section class="panel">
+
         <div class="calendario-barra">
             <div>
                 <h2>Actividades registradas</h2>
-                <p class="calendario-descripcion">Bloques azules: actividades programadas. Espacios vacíos: sin actividades registradas.</p>
+                <p class="calendario-descripcion">
+                    Azul: programación del CSV.
+                    Verde: actividades añadidas manualmente.
+                </p>
             </div>
-            <button id="cambiar-vista" class="boton-alternar" type="button" hidden>Ver tabla</button>
+
+            <div class="calendario-acciones">
+                <a class="boton-agregar"
+                   th:href="@{/actividades/nueva(ambiente=${ambiente.codigo})}">
+                    + Agregar actividad
+                </a>
+
+                <button id="cambiar-vista" class="boton-alternar"
+                        type="button" hidden>
+                    Ver tabla
+                </button>
+            </div>
         </div>
 
-        <!-- La vista de calendario se construye a partir de las filas del horario real. -->
-        <div id="calendario-semanal" class="calendario-scroll" hidden aria-label="Calendario semanal de actividades"></div>
+        <nav id="semana-controles" class="semana-controles"
+             aria-label="Navegación de semanas" hidden>
 
-        <!-- Tabla original conservada como alternativa accesible y respaldo sin JavaScript. -->
+            <button type="button" id="semana-anterior">
+                ← Anterior
+            </button>
+
+            <strong id="rango-semana" aria-live="polite"></strong>
+
+            <button type="button" id="semana-siguiente">
+                Siguiente →
+            </button>
+        </nav>
+
+        <p id="error-calendario" class="mensaje error"
+           role="alert" hidden></p>
+
+        <div id="calendario-semanal"
+             class="calendario-scroll"
+             th:attr="data-codigo=${ambiente.codigo}"
+             aria-label="Calendario semanal de actividades"
+             hidden>
+        </div>
+
         <div id="tabla-horarios" class="tabla">
-            <table th:unless="${#lists.isEmpty(horarios)}">
+            <table>
                 <thead>
-                <tr>
-                    <th scope="col">Día</th>
-                    <th scope="col">Inicio</th>
-                    <th scope="col">Fin</th>
-                </tr>
+                    <tr>
+                        <th>Día / actividad</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                    </tr>
                 </thead>
+
                 <tbody>
-                <tr th:each="h : ${horarios}">
-                    <td class="dia" th:text="${h.nombreDia}"></td>
-                    <td th:text="${h.inicio}"></td>
-                    <td th:text="${h.fin}"></td>
-                </tr>
+                    <tr th:each="h : ${horarios}">
+                        <td class="dia" th:text="${h.nombreDia}"></td>
+                        <td th:text="${h.inicio}"></td>
+                        <td th:text="${h.fin}"></td>
+                    </tr>
                 </tbody>
+
+                <tbody id="filas-adicionales"></tbody>
             </table>
         </div>
-        <p th:if="${#lists.isEmpty(horarios)}">Este ambiente no tiene actividades programadas en la información registrada.</p>
+
+        <noscript>
+            Activa JavaScript para visualizar las actividades adicionales.
+        </noscript>
     </section>
 </main>
+
 <footer th:replace="~{fragmentos :: pie}"></footer>
 </body>
 </html>

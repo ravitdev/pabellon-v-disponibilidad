@@ -16,16 +16,29 @@ import pe.edu.pucp.pabellon.repository.*;
 public class ImportacionService {
   private final AmbienteRepository ambientes;
   private final ActividadRepository actividades;
+  private final ActividadExtraRepository extras;
   private final ActualizacionRepository actualizaciones;
 
+  
   public ImportacionService(
-      AmbienteRepository ambientes,
-      ActividadRepository actividades,
-      ActualizacionRepository actualizaciones) {
-    this.ambientes = ambientes;
-    this.actividades = actividades;
-    this.actualizaciones = actualizaciones;
+          AmbienteRepository ambientes,
+          ActividadRepository actividades,
+          ActualizacionRepository actualizaciones) {
+      this(ambientes, actividades, actualizaciones, null);
   }
+
+  @org.springframework.beans.factory.annotation.Autowired
+  public ImportacionService(
+          AmbienteRepository ambientes,
+          ActividadRepository actividades,
+          ActualizacionRepository actualizaciones,
+          ActividadExtraRepository extras) {
+      this.ambientes = ambientes;
+      this.actividades = actividades;
+      this.actualizaciones = actualizaciones;
+      this.extras = extras;
+  }
+
 
   private record Fila(String codigo, String tipo, Integer dia, LocalTime inicio, LocalTime fin) {}
 
@@ -48,6 +61,9 @@ public class ImportacionService {
     List<Fila> filas = validar(contenido);
     // La validación completa precede a cualquier escritura; todas las escrituras comparten una
     // transacción.
+    if (extras != null) {
+    extras.deleteAllInBatch();
+    }
     actividades.deleteAllInBatch();
     ambientes.deleteAllInBatch();
     Map<String, Ambiente> nuevos = new LinkedHashMap<>();
