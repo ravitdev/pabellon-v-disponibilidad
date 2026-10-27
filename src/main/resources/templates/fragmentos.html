@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="cabecera">
+<a class="marca" th:href="@{/}">
+<span class="isotipo">V</span>
+<span>Pabellón V<small>Consulta de ambientes · PUCP</small>
+</span>
+</a>
+<nav aria-label="Navegación principal">
+<a th:href="@{/}">Ambientes</a>
+<a th:href="@{/importar}">Actualizar horarios</a>
+</nav>
+</header>
+<div th:fragment="aviso" class="aviso">
+<strong>Disponibilidad según horarios.</strong> No garantiza que el ambiente esté físicamente vacío ni autoriza su uso. <span th:if="${actualizacion != null and actualizacion.ejemplo}">
+<strong>Datos ficticios de prueba; no son horarios oficiales de la PUCP.</strong>
+</span>
+<span th:if="${actualizacion != null and !actualizacion.ejemplo}">Datos cargados por el usuario; su carácter oficial no ha sido verificado.</span>
+</div>
+<footer th:fragment="pie">
+<span>Proyecto académico · Ética y Responsabilidad Social Universitaria</span>
+<span th:if="${actualizacion != null}" th:text="'Última actualización: ' + ${actualizacion.fechaLocal} + ' (Lima)'">
+</span>
+</footer>
+</body>
+</html>
