@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ambiente no encontrado</title>
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<script defer th:src="@{/js/app.js}">
+</script>
+</head>
+<body>
+<header th:replace="~{fragmentos :: cabecera}">
+</header>
+<main>
+<h1>Ambiente no encontrado</h1>
+<p>El código consultado no está en la información registrada.</p>
+<a th:href="@{/}">Volver a ambientes</a>
+</main>
+<footer th:replace="~{fragmentos :: pie}">
+</footer>
+</body>
+</html>

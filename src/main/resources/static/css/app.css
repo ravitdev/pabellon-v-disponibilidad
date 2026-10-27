@@ -1,0 +1,376 @@
+* {
+  box-sizing:border-box;
+}
+:root {
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:#172c3e;
+  background:#f5f7f9;
+  font-size:16px;
+  line-height:1.6;
+}
+body {
+  margin:0;
+}
+a {
+  color:#176073;
+  text-underline-offset:4px;
+}
+header {
+  background:#fff;
+  border-bottom:1px solid #dce4e8;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:23px max(5vw,calc((100vw - 1160px)/2));
+  gap:24px;
+}
+.marca {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  text-decoration:none;
+  color:#18354a;
+  font-size:20px;
+  font-weight:700;
+  line-height:1.3;
+}
+.marca small {
+  display:block;
+  font-size:12px;
+  font-weight:400;
+  margin-top:5px;
+  color:#607483;
+}
+.isotipo {
+  display:grid;
+  place-items:center;
+  background:#153e54;
+  color:#fff;
+  width:44px;
+  height:48px;
+  border-radius:10px;
+  font-size:28px;
+}
+nav {
+  display:flex;
+  gap:26px;
+}
+nav a {
+  font-size:14px;
+  text-decoration:none;
+  font-weight:600;
+}
+main {
+  max-width:1160px;
+  margin:auto;
+  padding:40px 24px 64px;
+}
+.intro {
+  margin:14px 0 28px;
+}
+.eyebrow {
+  font-size:11px;
+  letter-spacing:1.7px;
+  font-weight:750;
+  color:#537582;
+}
+h1 {
+  font-size:clamp(30px,4vw,44px);
+  line-height:1.18;
+  letter-spacing:-1.4px;
+  margin:12px 0 16px;
+  font-weight:720;
+}
+p {
+  color:#566b78;
+  margin:10px 0 20px;
+}
+h2 {
+  font-size:21px;
+  line-height:1.4;
+  margin:0 0 18px;
+}
+h3 {
+  font-size:27px;
+  margin:8px 0 15px;
+  letter-spacing:-.5px;
+}
+.aviso {
+  background:#e9f0f3;
+  border:1px solid #d8e4e9;
+  border-left:3px solid #557d91;
+  padding:15px 20px;
+  border-radius:5px;
+  font-size:13px;
+  color:#375568;
+  margin-bottom:28px;
+}
+.aviso span {
+  display:block;
+  margin-top:4px;
+}
+.panel {
+  background:white;
+  border:1px solid #dfe6ea;
+  border-radius:12px;
+  padding:26px;
+  margin-bottom:28px;
+}
+.consulta {
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr 1.4fr;
+  gap:18px;
+  align-items:end;
+}
+label {
+  display:flex;
+  flex-direction:column;
+  font-size:13px;
+  font-weight:600;
+  gap:8px;
+}
+input {
+  font:inherit;
+  min-width:0;
+  width:100%;
+  border:1px solid #b9c9d1;
+  border-radius:6px;
+  padding:11px 12px;
+  background:white;
+  color:#18394e;
+  min-height:46px;
+}
+button {
+  border:0;
+  border-radius:6px;
+  background:#185468;
+  color:white;
+  padding:13px 18px;
+  font:inherit;
+  font-size:14px;
+  font-weight:650;
+  cursor:pointer;
+  min-height:46px;
+}
+button:hover {
+  background:#123e4d;
+}
+button:disabled {
+  opacity:.6;
+}
+a:focus-visible,button:focus-visible,input:focus-visible {
+  outline:3px solid #bd7000;
+  outline-offset:3px;
+}
+.checkbox {
+  flex-direction:row;
+  align-items:center;
+  gap:10px;
+  font-weight:400;
+  grid-column:1/-1;
+}
+.checkbox input {
+  width:17px;
+  min-height:17px;
+  flex-shrink:0;
+  accent-color:#185468;
+}
+.section-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:34px 0 20px;
+  gap:16px;
+}
+.section-head h2 {
+  margin:5px 0;
+}
+.section-head p {
+  margin:0;
+  font-size:14px;
+}
+.section-head a {
+  font-size:13px;
+}
+.contador {
+  font-size:13px;
+  background:#e3eaee;
+  color:#4b6676;
+  border-radius:20px;
+  padding:3px 9px;
+  margin-left:6px;
+  vertical-align:middle;
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.ambiente {
+  border:1px solid #dbe4e9;
+  border-radius:10px;
+  background:white;
+  padding:23px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.tipo {
+  font-size:12px;
+  color:#5e7481;
+}
+.ambiente a {
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  font-weight:650;
+  text-decoration:none;
+  border-top:1px solid #e9eef1;
+  margin-top:auto;
+  padding-top:16px;
+}
+.estado {
+  font-size:11px;
+  display:inline-block;
+  border-radius:5px;
+  padding:5px 8px;
+  margin-bottom:22px;
+  font-weight:650;
+}
+.libre {
+  background:#e5f4eb;
+  color:#246342;
+}
+.ocupado {
+  background:#fff0df;
+  color:#885016;
+}
+.muted {
+  font-size:12px;
+  margin:0 0 20px;
+}
+.import-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+.import-grid form {
+  display:flex;
+  flex-direction:column;
+  gap:23px;
+  margin-top:26px;
+}
+.import-grid p {
+  font-size:14px;
+}
+pre {
+  overflow-x:auto;
+  background:#f2f5f7;
+  border:1px solid #e2e8ec;
+  border-radius:7px;
+  padding:14px;
+  font-size:12px;
+  line-height:1.8;
+}
+code {
+  font-size:12px;
+}
+.mensaje {
+  padding:16px;
+  border-radius:6px;
+}
+.error {
+  background:#fff0ed;
+  color:#912f24;
+  border:1px solid #e4bcb5;
+}
+.exito {
+  background:#e5f4eb;
+  color:#246342;
+  border:1px solid #b7dac5;
+}
+.volver {
+  font-size:13px;
+}
+.tabla {
+  overflow-x:auto;
+}
+table {
+  width:100%;
+  border-collapse:collapse;
+  text-align:left;
+}
+th {
+  font-size:12px;
+  color:#5f7787;
+  background:#f5f7f9;
+}
+th,td {
+  padding:14px;
+  border-bottom:1px solid #e4eaee;
+}
+.dia {
+  text-transform:capitalize;
+}
+footer {
+  max-width:1160px;
+  margin:auto;
+  padding:25px 24px;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  border-top:1px solid #dce4e8;
+  font-size:11px;
+  color:#607483;
+}
+@media(max-width:850px) {
+  .grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .consulta {
+    grid-template-columns:1fr 1fr;
+  }
+  .import-grid {
+    grid-template-columns:1fr;
+  }
+  .consulta>label:first-child {
+    grid-column:1/-1;
+  }
+  .consulta button {
+    grid-column:1/-1;
+  }
+}
+@media(max-width:540px) {
+  header {
+    padding:18px 20px;
+    align-items:flex-start;
+    flex-direction:column;
+    gap:18px;
+  }
+  nav {
+    gap:22px;
+  }
+  main {
+    padding:24px 16px 40px;
+  }
+  .grid {
+    grid-template-columns:1fr;
+  }
+  .panel {
+    padding:20px;
+  }
+  .section-head {
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  footer {
+    flex-direction:column;
+  }
+  .marca small {
+    font-size:11px;
+  }
+  h1 {
+    letter-spacing:-.7px;
+  }
+}

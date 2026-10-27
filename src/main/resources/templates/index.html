@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Disponibilidad · Pabellón V</title>
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<script defer th:src="@{/js/app.js}">
+</script>
+</head>
+<body>
+<header th:replace="~{fragmentos :: cabecera}">
+</header>
+<main>
+<div class="intro">
+<span class="eyebrow">PLANIFICA TU VISITA</span>
+<h1>Encuentra un ambiente<br>sin clases programadas.</h1>
+<p>Consulta aulas y laboratorios del pabellón V por fecha y horario.</p>
+</div>
+<div th:replace="~{fragmentos :: aviso}">
+</div>
+<section class="panel" aria-labelledby="buscar">
+<h2 id="buscar">Consultar disponibilidad</h2>
+<form method="get" th:action="@{/}" class="consulta">
+<label>Fecha<input required type="date" name="fecha" th:value="${fecha}">
+</label>
+<label>Desde<input required type="time" name="inicio" th:value="${inicio}">
+</label>
+<label>Hasta<input required type="time" name="fin" th:value="${fin}">
+</label>
+<button type="submit">Consultar ambientes <span aria-hidden="true">→</span>
+</button>
+<label class="checkbox">
+<input type="checkbox" name="soloDisponibles" value="true" th:checked="${soloDisponibles}"> Mostrar solo disponibles</label>
+</form>
+<p class="mensaje error" role="alert" th:if="${error}" th:text="${error}">
+</p>
+</section>
+<section th:if="${consultado}">
+<div class="section-head">
+<div>
+<span class="eyebrow">RESULTADOS DE LA CONSULTA</span>
+<h2 th:text="${libres} + ' ambientes disponibles'">Resultados</h2>
+<p th:text="${fecha} + ' · ' + ${inicio} + ' – ' + ${fin}">
+</p>
+</div>
+<a th:href="@{/}">Ver todos los ambientes</a>
+</div>
+<div class="grid">
+<article class="ambiente" th:each="r : ${resultados}">
+<span class="tipo" th:text="${r.ambiente.tipo} + ' · Piso ' + ${r.ambiente.piso}">
+</span>
+<h3 th:text="${r.ambiente.codigo}">
+</h3>
+<span class="estado" th:classappend="${r.disponible ? 'libre' : 'ocupado'}" th:text="${r.disponible ? 'Sin actividades programadas' : 'Con actividad programada'}">
+</span>
+<a th:href="@{/ambientes/{codigo}(codigo=${r.ambiente.codigo})}">Ver horario semanal <span aria-hidden="true">↗</span>
+</a>
+</article>
+</div>
+<p class="panel" th:if="${#lists.isEmpty(resultados)}">No hay ambientes disponibles para este intervalo. Prueba con otro horario.</p>
+</section>
+<section th:unless="${consultado}">
+<div class="section-head">
+<div>
+<span class="eyebrow">EXPLORA EL PABELLÓN</span>
+<h2>Ambientes registrados <span class="contador" th:text="${#lists.size(ambientes)}">
+</span>
+</h2>
+<p>Selecciona un ambiente para consultar su programación semanal.</p>
+</div>
+</div>
+<div class="grid">
+<article class="ambiente" th:each="a : ${ambientes}">
+<span class="tipo" th:text="${a.tipo} + ' · Piso ' + ${a.piso}">
+</span>
+<h3 th:text="${a.codigo}">
+</h3>
+<p class="muted">Consulta un intervalo para conocer su disponibilidad.</p>
+<a th:href="@{/ambientes/{codigo}(codigo=${a.codigo})}">Ver horario semanal <span aria-hidden="true">↗</span>
+</a>
+</article>
+</div>
+<p th:if="${#lists.isEmpty(ambientes)}">No hay ambientes registrados. Carga un CSV para comenzar.</p>
+</section>
+</main>
+<footer th:replace="~{fragmentos :: pie}">
+</footer>
+</body>
+</html>

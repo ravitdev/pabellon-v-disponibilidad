@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No se pudo completar la solicitud</title>
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<script defer th:src="@{/js/app.js}">
+</script>
+</head>
+<body>
+<header th:replace="~{fragmentos :: cabecera}">
+</header>
+<main>
+<h1>No se pudo completar la solicitud</h1>
+<p>Revisa los datos e inténtalo nuevamente. Si el problema continúa, consulta los registros de la aplicación.</p>
+<a th:href="@{/}">Volver al inicio</a>
+</main>
+<footer th:replace="~{fragmentos :: pie}">
+</footer>
+</body>
+</html>

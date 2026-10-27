@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Actualizar horarios · Pabellón V</title>
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<script defer th:src="@{/js/app.js}">
+</script>
+</head>
+<body>
+<header th:replace="~{fragmentos :: cabecera}">
+</header>
+<main>
+<a class="volver" th:href="@{/}">← Volver a ambientes</a>
+<div class="intro">
+<span class="eyebrow">GESTIÓN DE INFORMACIÓN</span>
+<h1>Actualizar horarios</h1>
+<p>Carga un CSV para reemplazar los ambientes y su programación semanal.</p>
+</div>
+<div th:replace="~{fragmentos :: aviso}">
+</div>
+<p class="mensaje exito" role="status" th:if="${exito}" th:text="${exito}">
+</p>
+<p class="mensaje error" role="alert" th:if="${error}" th:text="${error}">
+</p>
+<div class="import-grid">
+<section class="panel">
+<h2>Cargar archivo CSV</h2>
+<p>La carga válida reemplaza <strong>todos los ambientes y horarios anteriores</strong>. Si se encuentra un error, se conserva la información existente.</p>
+<form method="post" th:action="@{/importar}" enctype="multipart/form-data" id="carga">
+<label>Archivo CSV (UTF-8, máximo 2 MB)<input required type="file" name="archivo" accept=".csv,text/csv">
+</label>
+<label class="checkbox">
+<input type="checkbox" name="ejemplo" value="true" checked> El archivo contiene datos ficticios de prueba</label>
+<label class="checkbox">
+<input type="checkbox" required> Entiendo que se reemplazará toda la información anterior.</label>
+<button type="submit">Validar y reemplazar horarios</button>
+<p id="progreso" aria-live="polite">
+</p>
+</form>
+</section>
+<section class="panel">
+<h2>Formato del archivo</h2>
+<p>Usa esta cabecera y una fila por actividad. Los días pueden llevar tildes.</p>
+<pre>ambiente,dia_semana,hora_inicio,hora_fin
+V-201,Lunes,08:00,10:00
+V-201,Miércoles,14:00,16:00
+V-202,,,</pre>
+<p>Deja día, inicio y fin vacíos para registrar un ambiente sin actividades. Si incluyes una actividad, completa los tres campos.</p>
+<p>Se admiten códigos V-100 a V-399 de los pisos 1 a 3. Todos se consideran laboratorios por defecto. Para aulas, agrega la columna <code>tipo</code> al final e indica <code>Aula</code> o <code>Laboratorio</code> en cada fila.</p>
+<a class="descarga" th:href="@{/ejemplos/horarios-ficticios.csv}" download>↓ Descargar CSV ficticio de ejemplo</a>
+</section>
+</div>
+</main>
+<footer th:replace="~{fragmentos :: pie}">
+</footer>
+</body>
+</html>

@@ -1,0 +1,8 @@
+* text=auto
+mvnw text eol=lf
+mvnw.cmd text eol=crlf
+*.java text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.csv text eol=lf
