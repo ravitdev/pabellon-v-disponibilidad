@@ -4,22 +4,22 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 PORT="${PORT:-8080}"
-JAR_FILE="pabellon-v-1.0.0.jar"
-RUNTIME_DIR=".runtime/linux"
+JAR_FILE="target/pabellon-v-1.0.0.jar"
+RUNTIME_DIR="$(pwd)/.runtime/linux"
 
-if [ ! -f "$JAR_FILE" ]; then
-    echo "Error: No se encontro $JAR_FILE en $(pwd)"
+if [ ! -f "pom.xml" ]; then
+    echo "Error: No se encontro pom.xml en $(pwd)"
     exit 1
 fi
 
-get_java_major() {
-    local java_bin="$1"
-    if [ ! -x "$java_bin" ] && ! command -v "$java_bin" >/dev/null 2>&1; then
+get_javac_major() {
+    local javac_bin="$1"
+    if [ ! -x "$javac_bin" ] && ! command -v "$javac_bin" >/dev/null 2>&1; then
         echo 0
         return
     fi
     local ver
-    ver=$("$java_bin" -version 2>&1 | awk -F '"' '/version/ {print $2}' | head -n1 || true)
+    ver=$("$javac_bin" -version 2>&1 | awk '{print $2}' | head -n1 || true)
     if [ -z "$ver" ]; then
         echo 0
         return
@@ -32,19 +32,25 @@ get_java_major() {
     echo "${major:-0}"
 }
 
-JAVA_CMD=""
+SELECTED_JAVA_HOME=""
 
-if [ -x "$RUNTIME_DIR/bin/java" ]; then
-    JAVA_CMD="$RUNTIME_DIR/bin/java"
-elif command -v java >/dev/null 2>&1; then
-    MAJOR=$(get_java_major "java")
+if [ -x "$RUNTIME_DIR/bin/javac" ]; then
+    SELECTED_JAVA_HOME="$RUNTIME_DIR"
+elif [ -n "${JAVA_HOME:-}" ] && [ -x "$JAVA_HOME/bin/javac" ]; then
+    MAJOR=$(get_javac_major "$JAVA_HOME/bin/javac")
     if [ "$MAJOR" -ge 21 ] 2>/dev/null; then
-        JAVA_CMD="java"
+        SELECTED_JAVA_HOME="$JAVA_HOME"
+    fi
+elif command -v javac >/dev/null 2>&1; then
+    MAJOR=$(get_javac_major "javac")
+    if [ "$MAJOR" -ge 21 ] 2>/dev/null; then
+        JAVAC_PATH=$(readlink -f "$(command -v javac)")
+        SELECTED_JAVA_HOME=$(dirname "$(dirname "$JAVAC_PATH")")
     fi
 fi
 
-if [ -z "$JAVA_CMD" ]; then
-    echo "Java 21+ no detectado en el sistema. Descargando JRE 21 portable para Linux..."
+if [ -z "$SELECTED_JAVA_HOME" ]; then
+    echo "JDK 21+ no detectado en el sistema. Descargando JDK 21 portable para Linux..."
     UNAME_ARCH="$(uname -m)"
     case "$UNAME_ARCH" in
         x86_64|amd64) ARCH="x64" ;;
@@ -55,32 +61,47 @@ if [ -z "$JAVA_CMD" ]; then
             ;;
     esac
 
-    URL="https://api.adoptium.net/v3/binary/latest/21/ga/linux/${ARCH}/jre/hotspot/normal/eclipse"
+    URL="https://api.adoptium.net/v3/binary/latest/21/ga/linux/${ARCH}/jdk/hotspot/normal/eclipse"
+    rm -rf "$RUNTIME_DIR"
     mkdir -p "$RUNTIME_DIR"
-    TMP_ARCHIVE="$RUNTIME_DIR/jre21.tar.gz"
+    TMP_ARCHIVE="$RUNTIME_DIR/jdk21.tar.gz"
 
     if command -v curl >/dev/null 2>&1; then
         curl -fL "$URL" -o "$TMP_ARCHIVE"
     elif command -v wget >/dev/null 2>&1; then
         wget -O "$TMP_ARCHIVE" "$URL"
     else
-        echo "Error: Se requiere curl o wget para descargar Java 21."
+        echo "Error: Se requiere curl o wget para descargar el JDK 21."
         exit 1
     fi
 
     tar -xzf "$TMP_ARCHIVE" -C "$RUNTIME_DIR" --strip-components=1
     rm -f "$TMP_ARCHIVE"
-    JAVA_CMD="$RUNTIME_DIR/bin/java"
-    echo "JRE 21 portable instalado correctamente."
+    SELECTED_JAVA_HOME="$RUNTIME_DIR"
+    echo "JDK 21 portable instalado correctamente."
+fi
+
+export JAVA_HOME="$SELECTED_JAVA_HOME"
+export PATH="$JAVA_HOME/bin:$PATH"
+JAVA_CMD="$JAVA_HOME/bin/java"
+
+echo "============================================================"
+echo "  Compilando proyecto y verificando dependencias (Maven)..."
+echo "============================================================"
+chmod +x ./mvnw
+./mvnw package -DskipTests
+
+if [ ! -f "$JAR_FILE" ]; then
+    echo "Error: No se encontro el ejecutable generado en $JAR_FILE"
+    exit 1
 fi
 
 echo "============================================================"
-echo "  Disponibilidad del Pabellon V - Servidor Local"
+echo "  Disponibilidad del Pabellon V - Servidor Local (Linux)"
 echo "  URL: http://localhost:${PORT}"
 echo "  Presiona Ctrl+C para detener el servidor."
 echo "============================================================"
 
-# Abrir el navegador automaticamente cuando el servidor responda
 (
     for _ in $(seq 1 30); do
         if command -v curl >/dev/null 2>&1; then

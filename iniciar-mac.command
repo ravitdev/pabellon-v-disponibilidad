@@ -4,29 +4,29 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 PORT="${PORT:-8080}"
-JAR_FILE="pabellon-v-1.0.0.jar"
-RUNTIME_DIR=".runtime/mac"
+JAR_FILE="target/pabellon-v-1.0.0.jar"
+RUNTIME_DIR="$(pwd)/.runtime/mac"
 
-if [ ! -f "$JAR_FILE" ]; then
-    echo "Error: No se encontro $JAR_FILE en $(pwd)"
+if [ ! -f "pom.xml" ]; then
+    echo "Error: No se encontro pom.xml en $(pwd)"
     exit 1
 fi
 
-JAVA_CMD=""
+SELECTED_JAVA_HOME=""
 
-if [ -x "$RUNTIME_DIR/Contents/Home/bin/java" ]; then
-    JAVA_CMD="$RUNTIME_DIR/Contents/Home/bin/java"
-elif [ -x "$RUNTIME_DIR/bin/java" ]; then
-    JAVA_CMD="$RUNTIME_DIR/bin/java"
+if [ -x "$RUNTIME_DIR/Contents/Home/bin/javac" ]; then
+    SELECTED_JAVA_HOME="$RUNTIME_DIR/Contents/Home"
+elif [ -x "$RUNTIME_DIR/bin/javac" ]; then
+    SELECTED_JAVA_HOME="$RUNTIME_DIR"
 elif [ -x "/usr/libexec/java_home" ]; then
     SYS_JAVA_HOME=$(/usr/libexec/java_home -v 21+ 2>/dev/null || true)
-    if [ -n "$SYS_JAVA_HOME" ] && [ -x "$SYS_JAVA_HOME/bin/java" ]; then
-        JAVA_CMD="$SYS_JAVA_HOME/bin/java"
+    if [ -n "$SYS_JAVA_HOME" ] && [ -x "$SYS_JAVA_HOME/bin/javac" ]; then
+        SELECTED_JAVA_HOME="$SYS_JAVA_HOME"
     fi
 fi
 
-if [ -z "$JAVA_CMD" ]; then
-    echo "Java 21+ no detectado en macOS. Descargando JRE 21 portable..."
+if [ -z "$SELECTED_JAVA_HOME" ]; then
+    echo "JDK 21+ no detectado en macOS. Descargando JDK 21 portable..."
     UNAME_ARCH="$(uname -m)"
     case "$UNAME_ARCH" in
         arm64|aarch64) ARCH="aarch64" ;;
@@ -37,21 +37,37 @@ if [ -z "$JAVA_CMD" ]; then
             ;;
     esac
 
-    URL="https://api.adoptium.net/v3/binary/latest/21/ga/mac/${ARCH}/jre/hotspot/normal/eclipse"
+    URL="https://api.adoptium.net/v3/binary/latest/21/ga/mac/${ARCH}/jdk/hotspot/normal/eclipse"
+    rm -rf "$RUNTIME_DIR"
     mkdir -p "$RUNTIME_DIR"
-    TMP_ARCHIVE="$RUNTIME_DIR/jre21.tar.gz"
+    TMP_ARCHIVE="$RUNTIME_DIR/jdk21.tar.gz"
 
     curl -fL "$URL" -o "$TMP_ARCHIVE"
     tar -xzf "$TMP_ARCHIVE" -C "$RUNTIME_DIR" --strip-components=1
     rm -f "$TMP_ARCHIVE"
     xattr -cr "$RUNTIME_DIR" 2>/dev/null || true
 
-    if [ -x "$RUNTIME_DIR/Contents/Home/bin/java" ]; then
-        JAVA_CMD="$RUNTIME_DIR/Contents/Home/bin/java"
+    if [ -x "$RUNTIME_DIR/Contents/Home/bin/javac" ]; then
+        SELECTED_JAVA_HOME="$RUNTIME_DIR/Contents/Home"
     else
-        JAVA_CMD="$RUNTIME_DIR/bin/java"
+        SELECTED_JAVA_HOME="$RUNTIME_DIR"
     fi
-    echo "JRE 21 portable instalado correctamente."
+    echo "JDK 21 portable instalado correctamente."
+fi
+
+export JAVA_HOME="$SELECTED_JAVA_HOME"
+export PATH="$JAVA_HOME/bin:$PATH"
+JAVA_CMD="$JAVA_HOME/bin/java"
+
+echo "============================================================"
+echo "  Compilando proyecto y verificando dependencias (Maven)..."
+echo "============================================================"
+chmod +x ./mvnw
+./mvnw package -DskipTests
+
+if [ ! -f "$JAR_FILE" ]; then
+    echo "Error: No se encontro el ejecutable generado en $JAR_FILE"
+    exit 1
 fi
 
 echo "============================================================"
