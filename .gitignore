@@ -1,5 +1,7 @@
 target/
 data/
+.runtime/
+*.jar
 *.mv.db
 *.trace.db
 .idea/
