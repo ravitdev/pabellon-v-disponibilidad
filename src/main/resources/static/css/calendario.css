@@ -154,3 +154,27 @@
     box-sizing: border-box;
     white-space: nowrap;
 }
+
+
+.calendario-acciones .boton-gestionar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    min-height: 42px;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    color: #185468;
+    background: white;
+    border: 1px solid #b9c9d1;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.calendario-acciones .boton-gestionar:hover {
+    background: #f0f5f7;
+}

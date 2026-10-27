@@ -1,0 +1,81 @@
+
+.gestion-encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.gestion-encabezado h2 {
+    margin-bottom: 6px;
+}
+
+.gestion-encabezado p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.boton-nuevo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    min-height: 42px;
+    background: #185468;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.boton-nuevo:hover {
+    background: #123e4d;
+}
+
+.tabla-gestion td {
+    vertical-align: middle;
+}
+
+.tabla-gestion strong {
+    display: block;
+    color: #172c3e;
+    font-size: 14px;
+}
+
+.tabla-gestion small {
+    display: block;
+    margin-top: 4px;
+    color: #607483;
+    font-size: 12px;
+}
+
+.boton-eliminar {
+    background: #fff0ed;
+    border: 1px solid #e6b6ae;
+    color: #a52f24;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.boton-eliminar:hover {
+    background: #fbded9;
+}
+
+.nota-gestion {
+    margin-top: 20px;
+    color: #607483;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .gestion-encabezado {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

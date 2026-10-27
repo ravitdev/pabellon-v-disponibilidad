@@ -23,6 +23,10 @@ public class Actividad {
   @Column(nullable = false)
   private LocalTime fin;
 
+  public Long getId() {
+      return id;
+  }
+
   protected Actividad() {}
 
   public Actividad(Ambiente ambiente, int dia, LocalTime inicio, LocalTime fin) {

@@ -1,0 +1,136 @@
+
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Gestionar actividades · Pabellón V</title>
+
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet"
+          th:href="@{/css/gestionar-actividades.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragmentos :: cabecera}"></header>
+
+<main>
+
+    <a class="volver"
+       th:href="@{/ambientes/{codigo}(codigo=${ambiente.codigo})}">
+        ← Volver al calendario
+    </a>
+
+    <div class="intro">
+        <span class="eyebrow">GESTIÓN DE HORARIOS</span>
+
+        <h1>Gestionar actividades</h1>
+
+        <p>
+            Ambiente:
+            <strong th:text="${ambiente.codigo}"></strong>
+        </p>
+    </div>
+
+    <div th:replace="~{fragmentos :: aviso}"></div>
+
+    <!-- Mensajes de confirmación y error -->
+    <p class="mensaje exito" th:if="${exito}"
+       role="status" th:text="${exito}"></p>
+
+    <p class="mensaje error" th:if="${error}"
+       role="alert" th:text="${error}"></p>
+
+    <section class="panel">
+
+        <div class="gestion-encabezado">
+            <div>
+                <h2>Actividades registradas</h2>
+
+                <p>
+                    Selecciona la actividad que deseas eliminar.
+                    Esta acción no se puede deshacer.
+                </p>
+            </div>
+
+            <a class="boton-nuevo"
+               th:href="@{/actividades/nueva(ambiente=${ambiente.codigo})}">
+                + Agregar actividad
+            </a>
+        </div>
+
+        <!-- Estado vacío -->
+        <p th:if="${#lists.isEmpty(registros)}">
+            Este ambiente no tiene actividades registradas.
+        </p>
+
+        <!-- Listado de actividades -->
+        <div class="tabla"
+             th:unless="${#lists.isEmpty(registros)}">
+
+            <table class="tabla-gestion">
+
+                <thead>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Día / fecha</th>
+                        <th>Horario</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="fila : ${registros}">
+
+                        <td>
+                            <strong th:text="${fila.titulo}">
+                            </strong>
+
+                            <small th:text="${fila.detalle}">
+                            </small>
+                        </td>
+
+                        <td th:text="${fila.cuando}"></td>
+
+                        <td th:text="${fila.horario}"></td>
+
+                        <td>
+                            <form method="post"
+                                  th:action="@{/ambientes/{codigo}/actividades/{tipo}/{id}/eliminar(
+                                    codigo=${ambiente.codigo},
+                                    tipo=${fila.tipo},
+                                    id=${fila.id}
+                                  )}"
+                                  onsubmit="return confirm('¿Eliminar esta actividad? Esta acción no se puede deshacer.');">
+
+                                <button type="submit"
+                                        class="boton-eliminar"
+                                        th:attr="aria-label=${'Eliminar ' + fila.titulo + ' del ambiente ' + ambiente.codigo}">
+                                    Eliminar
+                                </button>
+
+                            </form>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+        <p class="nota-gestion">
+            Las actividades semanales se eliminarán de todas
+            las semanas. Las actividades puntuales solo afectan
+            su fecha registrada.
+        </p>
+
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: pie}"></footer>
+
+</body>
+</html>

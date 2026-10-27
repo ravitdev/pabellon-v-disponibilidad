@@ -47,6 +47,11 @@
                    th:href="@{/actividades/nueva(ambiente=${ambiente.codigo})}">
                     + Agregar actividad
                 </a>
+                
+                <a class="boton-gestionar"
+                th:href="@{/ambientes/{codigo}/gestionar(codigo=${ambiente.codigo})}">
+                    Gestionar actividades
+                </a>
 
                 <button id="cambiar-vista" class="boton-alternar"
                         type="button" hidden>
